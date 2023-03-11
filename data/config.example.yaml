@@ -1,0 +1,7 @@
+SMBC: # 三井住友銀行
+    branchNo: 000 # 支店番号 3桁
+    accountNo: 0000000 # 口座番号 7桁
+    password: 0000 # パスワード 4桁
+
+BARK: # Bark
+    server: https://api.day.app/YOUTOKEN/ # Barkのサーバー
