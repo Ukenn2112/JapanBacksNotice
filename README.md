@@ -4,6 +4,9 @@
 ## 功能
 
   利用 Bark + 快捷指令 + iCost 实现实时余额通知以及快速记账
+  
+  <img src="https://user-images.githubusercontent.com/60847880/224486037-63ff15b8-adec-4179-b3ee-1c25fe41e749.gif" align="center" width="200">
+
 
 ## 支持银行
 
