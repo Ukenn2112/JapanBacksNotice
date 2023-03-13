@@ -43,13 +43,13 @@ def mufg_balance():
             "_TRANID": "AZ091_999",
         }
     )
-    cookies = r.headers["Set-Cookie"]
     html = HTML(r.text)
     error = html.xpath("//section[@class='page-error']")
     if error:
         logging.warning("[MUFJ] 登录失效，重新登录")
         mufg_login()
         return mufg_balance()
+    cookies = r.headers["Set-Cookie"]
     balance = html.xpath("//span[@class='total-amount-unmask hide']/text()")[0]
     sendts = html.xpath("//input[@name='_SENDTS']/@value")[0]
 
