@@ -5,4 +5,6 @@ with open("data/config.yaml", "r") as f:
 
 SMBC: dict = config["SMBC"]
 
+MUFG: dict = config["MUFG"]
+
 BARK: dict = config["BARK"]

@@ -3,6 +3,7 @@ import logging
 from apscheduler.schedulers.blocking import BlockingScheduler
 
 from utils.smbc import smbc_balance
+from utils.mufg import mufg_balance
 
 logging.getLogger().setLevel(logging.INFO)
 logging.basicConfig(
@@ -15,7 +16,7 @@ logging.basicConfig(
 
 def balance_inquiry():
     smbc_balance()
-
+    mufg_balance()
 
 def main():
     balance_inquiry()

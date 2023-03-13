@@ -3,8 +3,8 @@ import logging
 from playwright.sync_api import sync_playwright
 from requests import post
 
-from utils.bark import send_notice
-from utils.config import SMBC
+from .bark import send_notice
+from .config import SMBC
 
 jsessionid = None
 token = None

@@ -1,4 +1,5 @@
 from requests import post
+
 from .config import BARK
 
 
