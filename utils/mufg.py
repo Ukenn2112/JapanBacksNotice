@@ -6,15 +6,16 @@ from requests import post
 
 from .bark import send_notice
 from .config import MUFG
+from .sqlitedb import sql
 
 iwInfo = None
 now_balance = None
 
 def mufg_login():
-    """MUFJ 银行登录"""
+    """MUFG 银行登录"""
     global iwInfo
 
-    logging.info("[MUFJ] 执行登录")
+    logging.info("[MUFG] 执行登录")
     with sync_playwright() as p:
         browser = p.chromium.launch(headless=True)
         page = browser.new_page()
@@ -29,9 +30,11 @@ def mufg_login():
 
 
 def mufg_balance():
-    """MUFJ 银行余额查询"""
+    """MUFG 银行余额查询"""
     global now_balance
 
+    if now_balance is None:
+        now_balance = sql.select("MUFG")
     if not iwInfo: mufg_login()
     r = post(
         "https://direct11.bk.mufg.jp/ib/dfw/APL/bnkib/banking",
@@ -46,7 +49,7 @@ def mufg_balance():
     html = HTML(r.text)
     error = html.xpath("//section[@class='page-error']")
     if error:
-        logging.warning("[MUFJ] 登录失效，重新登录")
+        logging.warning("[MUFG] 登录失效，重新登录")
         mufg_login()
         return mufg_balance()
     cookies = r.headers["Set-Cookie"]
@@ -81,13 +84,11 @@ def mufg_balance():
         transaction = meisai_data.xpath("./td[@class='transaction']/text()")[0]
 
         send_notice(
-            "MUFJ 余额变动",
+            "MUFG 余额变动",
            f"金额: {manage_num}円 → {transaction}\n余额: {balance}", manage_num.replace(",", "").strip(),
-           "MUFJ", "https://article.biliimg.com/bfs/article/2db82e3d8bae1b9d1cf2cca3a437b02dcf5564d4.png"
+           "MUFG", "https://article.biliimg.com/bfs/article/2db82e3d8bae1b9d1cf2cca3a437b02dcf5564d4.png"
         )
+        sql.insert("MUFG", manage_num, balance, transaction)
         now_balance = balance
-    logging.info(f"[MUFJ] 余额: {now_balance}")
+    logging.info(f"[MUFG] 余额: {now_balance}")
     return now_balance
-
-
-mufg_balance()

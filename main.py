@@ -2,8 +2,9 @@ import logging
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 
-from utils.smbc import smbc_balance
 from utils.mufg import mufg_balance
+from utils.smbc import smbc_balance
+from utils.sqlitedb import sql
 
 logging.getLogger().setLevel(logging.INFO)
 logging.basicConfig(
@@ -19,6 +20,7 @@ def balance_inquiry():
     mufg_balance()
 
 def main():
+    sql.create_db()
     balance_inquiry()
     scheduler = BlockingScheduler(timezone="Asia/Tokyo")
     scheduler.add_job(

@@ -1,3 +1,4 @@
 config.yaml
 run.log
 __pycache__
+*.db

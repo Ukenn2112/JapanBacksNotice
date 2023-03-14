@@ -5,6 +5,7 @@ from requests import post
 
 from .bark import send_notice
 from .config import SMBC
+from .sqlitedb import sql
 
 jsessionid = None
 token = None
@@ -34,6 +35,8 @@ def smbc_balance():
     """SMBC 余额查询"""
     global now_balance
 
+    if now_balance is None:
+        now_balance = sql.select("SMBC")
     if not jsessionid or not token: smbc_login()
     logging.info("[SMBC] 执行余额查询")
     data = post(
@@ -50,7 +53,10 @@ def smbc_balance():
         logging.warning("[SMBC] 登录失效，重新登录")
         smbc_login()
         return smbc_balance()
-    if data["response"]["meisai"][0]["torihikigobalance"] != now_balance:
+    if now_balance == "":
+        sql.insert("SMBC", data["response"]["meisai"][0]["amount"], data["response"]["meisai"][0]["torihikigobalance"], data["response"]["meisai"][0]["comment"])
+        now_balance = data["response"]["meisai"][0]["torihikigobalance"]
+    elif data["response"]["meisai"][0]["torihikigobalance"] != now_balance:
         for m in data["response"]["meisai"]:
             if m["torihikigobalance"] == now_balance:
                 break
@@ -59,6 +65,7 @@ def smbc_balance():
                f"金额: {m['amount']} → {m['comment']}\n余额: {m['torihikigobalance']}", m["amount"].replace("円", "").replace(",", "").strip(),
                 "SMBC", "https://article.biliimg.com/bfs/article/e5461b8a66674e57306a3f0be600a4eb14e59d6b.png"
             )
+            sql.insert("SMBC", m["amount"], m["torihikigobalance"], m["comment"])
         now_balance = data["response"]["meisai"][0]["torihikigobalance"]
     logging.info(f"[SMBC] 余额: {now_balance}")
     return now_balance
