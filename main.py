@@ -16,7 +16,7 @@ logging.basicConfig(
 )
 
 def balance_inquiry():
-    # smbc_balance()
+    smbc_balance()
     mufg_balance()
 
 def main():
