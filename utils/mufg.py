@@ -76,7 +76,7 @@ def mufg_balance():
         error = b_html.xpath("//section[@class='page-error']")
         if error: return
 
-        meisai_data = b_html.xpath("//tr[@class='odd first_data']")[0]
+        meisai_data = b_html.xpath("//table[@class='data yen_nyushutsukin_001']/tbody/tr")[-1]
         if manage_to := meisai_data.xpath("./td[@class='manage number'][1]/strong/text()"):
             manage_num = "-" + manage_to[0]
         elif manage_from := meisai_data.xpath("./td[@class='manage number'][2]/strong/text()"):
