@@ -4,14 +4,13 @@ from playwright.sync_api import sync_playwright
 from requests import post
 
 from .bark import send_notice
-from .config import SMBC
 from .sqlitedb import sql
 
 jsessionid = None
 token = None
 now_balance = None
 
-def smbc_login():
+def smbc_login(SMBC):
     """SMBC 登录"""
     global jsessionid, token
 
