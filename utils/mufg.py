@@ -28,13 +28,13 @@ def mufg_login(MUFG):
         browser.close()
 
 
-def mufg_balance():
+def mufg_balance(MUFG):
     """MUFG 银行余额查询"""
     global now_balance
 
     if now_balance is None:
         now_balance = sql.select("MUFG")
-    if not iwInfo: mufg_login()
+    if not iwInfo: mufg_login(MUFG)
     r = post(
         "https://direct11.bk.mufg.jp/ib/dfw/APL/bnkib/banking",
         headers={

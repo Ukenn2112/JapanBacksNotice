@@ -30,13 +30,13 @@ def smbc_login(SMBC):
         browser.close()
 
 
-def smbc_balance():
+def smbc_balance(SMBC):
     """SMBC 余额查询"""
     global now_balance
 
     if now_balance is None:
         now_balance = sql.select("SMBC")
-    if not jsessionid or not token: smbc_login()
+    if not jsessionid or not token: smbc_login(SMBC)
     logging.info("[SMBC] 执行余额查询")
     data = post(
         "https://direct3.smbc.co.jp/ib/ajax/accountinquiry/AIFCDTLAjaxkikannshokai.smbc",
