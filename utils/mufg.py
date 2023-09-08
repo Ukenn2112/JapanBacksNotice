@@ -5,12 +5,13 @@ from playwright.sync_api import sync_playwright
 from requests import post
 
 from .bark import send_notice
+from .config import MUFG
 from .sqlitedb import sql
 
 iwInfo = None
 now_balance = None
 
-def mufg_login(MUFG):
+def mufg_login():
     """MUFG 银行登录"""
     global iwInfo
 
@@ -28,13 +29,14 @@ def mufg_login(MUFG):
         browser.close()
 
 
-def mufg_balance(MUFG):
+def mufg_balance():
     """MUFG 银行余额查询"""
+    if MUFG is None: return
     global now_balance
 
     if now_balance is None:
         now_balance = sql.select("MUFG")
-    if not iwInfo: mufg_login(MUFG)
+    if not iwInfo: mufg_login()
     r = post(
         "https://direct11.bk.mufg.jp/ib/dfw/APL/bnkib/banking",
         headers={

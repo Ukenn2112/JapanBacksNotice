@@ -4,13 +4,14 @@ from playwright.sync_api import sync_playwright
 from requests import post
 
 from .bark import send_notice
+from .config import SMBC
 from .sqlitedb import sql
 
 jsessionid = None
 token = None
 now_balance = None
 
-def smbc_login(SMBC):
+def smbc_login():
     """SMBC 登录"""
     global jsessionid, token
 
@@ -30,13 +31,14 @@ def smbc_login(SMBC):
         browser.close()
 
 
-def smbc_balance(SMBC):
+def smbc_balance():
     """SMBC 余额查询"""
+    if SMBC is None: return
     global now_balance
 
     if now_balance is None:
         now_balance = sql.select("SMBC")
-    if not jsessionid or not token: smbc_login(SMBC)
+    if not jsessionid or not token: smbc_login()
     logging.info("[SMBC] 执行余额查询")
     data = post(
         "https://direct3.smbc.co.jp/ib/ajax/accountinquiry/AIFCDTLAjaxkikannshokai.smbc",

@@ -16,10 +16,8 @@ logging.basicConfig(
 )
 
 def balance_inquiry():
-    from utils.config import SMBC
-    if SMBC: smbc_balance(SMBC)
-    from utils.config import MUFG
-    if MUFG: mufg_balance(MUFG)
+    smbc_balance()
+    mufg_balance()
 
 def main():
     sql.create_db()
