@@ -23,21 +23,25 @@ def smbc_login():
     global jsessionid, token
 
     logging.info("[SMBC] 执行登录")
-    with sync_playwright() as p:
-        browser = p.chromium.launch()
-        page = browser.new_page()
-        page.goto("https://direct.smbc.co.jp/aib/aibgsjsw3k12.jsp")
-        page.fill("input[name=branchNo]", str(SMBC["branchNo"]))
-        page.fill("input[name=accountNo]", str(SMBC["accountNo"]))
-        page.fill("input[name=cdPassword]", str(SMBC["password"]))
-        page.click("a[class='btn-type01 -orange01 js-login-submit']")
-        page.click("a[class='card-box01 -noPadding -overflow01 -shadow01']")
-        cookies = page.context.cookies()
-        jsessionid = [c for c in cookies if c["name"] == "JSESSIONID"][0]["value"]
-        token = page.query_selector_all('//input[@name="_TOKEN"]')[0].get_attribute(
-            "value"
-        )
-        browser.close()
+    try:
+        with sync_playwright() as p:
+            browser = p.chromium.launch()
+            page = browser.new_page()
+            page.goto("https://direct.smbc.co.jp/aib/aibgsjsw3k12.jsp")
+            page.fill("input[name=branchNo]", str(SMBC["branchNo"]))
+            page.fill("input[name=accountNo]", str(SMBC["accountNo"]))
+            page.fill("input[name=cdPassword]", str(SMBC["password"]))
+            page.click("a[class='btn-type01 -orange01 js-login-submit']")
+            page.click("a[class='card-box01 -noPadding -overflow01 -shadow01']")
+            cookies = page.context.cookies()
+            jsessionid = [c for c in cookies if c["name"] == "JSESSIONID"][0]["value"]
+            token = page.query_selector_all('//input[@name="_TOKEN"]')[0].get_attribute(
+                "value"
+            )
+            browser.close()
+    except Exception as e:
+        logging.error(f"[SMBC] 登录失败: {e}")
+        return None
 
 
 def smbc_balance():
