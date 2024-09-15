@@ -6,7 +6,7 @@ from utils.mufg import mufg_balance
 from utils.smbc import smbc_balance
 from utils.sqlitedb import sql
 
-logging.getLogger().setLevel(logging.INFO)
+logging.getLogger().setLevel(logging.WARNING)
 logging.basicConfig(
     format="[%(levelname)s] %(asctime)s: %(message)s",
     handlers=[

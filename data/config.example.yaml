@@ -2,6 +2,7 @@ SMBC: # 三井住友銀行
     branchNo: 000 # 支店番号 3桁
     accountNo: 0000000 # 口座番号 7桁
     password: 0000 # パスワード 4桁
+    gmail_labelId: "Label_1" # GmailのラベルID
 
 MUFG: # 三菱東京UFJ銀行
     branchNo: 000 # 支店番号 3桁
