@@ -53,7 +53,8 @@ def smbc_balance():
     if now_balance is None:
         now_balance = sql.select("SMBC")
     if not jsessionid or not token:
-        smbc_login()
+        if smbc_login() is None:
+            return None
     logging.info("[SMBC] 执行余额查询")
     data = post(
         "https://direct3.smbc.co.jp/ib/ajax/accountinquiry/AIFCDTLAjaxkikannshokai.smbc",
