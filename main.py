@@ -1,6 +1,7 @@
 import logging
 
-from apscheduler.schedulers.blocking import BlockingScheduler
+# from apscheduler.schedulers.blocking import BlockingScheduler
+import time
 
 from utils.mufg import mufg_balance
 from utils.smbc import smbc_balance
@@ -21,14 +22,16 @@ def balance_inquiry():
 
 def main():
     sql.create_db()
-    balance_inquiry()
-    scheduler = BlockingScheduler(timezone="Asia/Tokyo")
-    scheduler.add_job(
-        func=balance_inquiry,
-        trigger="interval",
-        minutes=1
-    )
-    scheduler.start()
+    while True:
+        balance_inquiry()
+        time.sleep(60)
+    # scheduler = BlockingScheduler(timezone="Asia/Tokyo")
+    # scheduler.add_job(
+    #     func=balance_inquiry,
+    #     trigger="interval",
+    #     minutes=1
+    # )
+    # scheduler.start()
 
 
 if __name__ == "__main__":
