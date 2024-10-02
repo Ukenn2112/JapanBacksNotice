@@ -56,16 +56,20 @@ def smbc_balance():
         if smbc_login() is None:
             return None
     logging.info("[SMBC] 执行余额查询")
-    data = post(
-        "https://direct3.smbc.co.jp/ib/ajax/accountinquiry/AIFCDTLAjaxkikannshokai.smbc",
-        headers={
-            "Cookie": f"JSESSIONID={jsessionid}",
-        },
-        params={
-            "_TOKEN": token,
-            "_FORMID": "AIFCDTL",
-        },
-    ).json()
+    try:
+        data = post(
+            "https://direct3.smbc.co.jp/ib/ajax/accountinquiry/AIFCDTLAjaxkikannshokai.smbc",
+            headers={
+                "Cookie": f"JSESSIONID={jsessionid}",
+            },
+            params={
+                "_TOKEN": token,
+                "_FORMID": "AIFCDTL",
+            },
+        ).json()
+    except Exception as e:
+        logging.error(f"[SMBC] 余额查询失败: {e}")
+        return None
     if data["success"] == "false":
         logging.warning("[SMBC] 登录失效，重新登录")
         smbc_login()
